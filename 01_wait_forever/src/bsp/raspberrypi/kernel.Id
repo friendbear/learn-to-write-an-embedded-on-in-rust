@@ -1,0 +1,31 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
+//
+// Copyright (c) 2018-2023 Andre Richter <andre.o.richter@gmail.com>
+
+/* The pthsical address at which the the kernel binary will be loaded by the Raspberry's firmare */
+__rpi_phys_binary_load_addr = 0x80000;
+
+ENTRY(__rpi_phys_binary_load_addr)
+
+/* Flags:
+ *  4 == R
+ *  5 == RX
+ *  6 == RW
+ */
+PHDRS
+{
+    segment_code PT_LOAD FLAGS(5);
+}
+
+SECTIONS
+{
+    . = __rpi_phys_binary_load_addr;
+
+    /************************
+     * segment_code
+    *************************
+    .text :
+    {
+        KEEP(*(.text._start))
+    } :segment_code
+}
